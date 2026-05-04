@@ -1,1 +1,14 @@
+📧 Email Ingestion, Classification & Routing System
+👤 Owner: Rimsha Tahir
 
+📌 Overview
+This component is responsible for automating the email triage process by receiving incoming emails, cleaning and preprocessing the text, classifying them into predefined categories using an AI model, and routing them to the appropriate department.
+The system eliminates manual sorting and improves efficiency by enabling real-time classification and routing of emails.
+
+🎯 Objectives
+- Automate the intake of incoming emails
+- Clean and preprocess raw email text
+- Classify emails into meaningful categories
+- Assign urgency levels based on content
+- Route emails to the correct department
+- Store structured outputs for tracking and analysis
