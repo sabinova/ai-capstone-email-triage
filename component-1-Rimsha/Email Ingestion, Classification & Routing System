@@ -1,5 +1,5 @@
-## 📧 Email Ingestion, Classification & Routing System
-## 👤 Owner: Rimsha Tahir
+# 📧 Email Ingestion, Classification & Routing System
+# 👤 Owner: Rimsha Tahir
 
 📌 Overview
 This component is responsible for automating the email triage process by receiving incoming emails, cleaning and preprocessing the text, classifying them into predefined categories using an AI model, and routing them to the appropriate department.
