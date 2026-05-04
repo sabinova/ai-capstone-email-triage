@@ -1,11 +1,11 @@
 # 📧 Email Ingestion, Classification & Routing System
 # 👤 Owner: Rimsha Tahir
 
-📌 Overview
+## 📌 Overview
 This component is responsible for automating the email triage process by receiving incoming emails, cleaning and preprocessing the text, classifying them into predefined categories using an AI model, and routing them to the appropriate department.
 The system eliminates manual sorting and improves efficiency by enabling real-time classification and routing of emails.
 
-🎯 Objectives
+## 🎯 Objectives
 - Automate the intake of incoming emails
 - Clean and preprocess raw email text
 - Classify emails into meaningful categories
@@ -13,15 +13,15 @@ The system eliminates manual sorting and improves efficiency by enabling real-ti
 - Route emails to the correct department
 - Store structured outputs for tracking and analysis
 
-🔗 Project Links
+## 🔗 Project Links
 n8n Workflow: https://jjmopalinski.app.n8n.cloud/workflow/RL0KmfL4ZiD3Iy0B
 Airtable Base: https://airtable.com/invite/l?inviteId=invl9clOcdNnLh2nf&inviteToken=341fb31d76f7a8e63c7bb35395e422ae8f4ebfff49a9030685d6f9ef4b9da6ed&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts
 ReqBin Testing: https://reqbin.com/4rek5hib
 
-🧠 System Workflow
+## 🧠 System Workflow
 Webhook → Text Cleaning → Record Creation → AI Classification → Record Update
 
-🔄 Step-by-Step
+## 🔄 Step-by-Step
 1. Email Ingestion
 Emails are received via a webhook trigger
 Data includes sender, subject, body, and timestamp
@@ -70,7 +70,7 @@ Confidence Score
 Status
 Route Queue
 
-🛠️ Tools & Technologies
+## 🛠️ Tools & Technologies
 Automation Platform: n8n
 AI Model: Hugging Face Transformers (facebook/bart-large-mnli)
 Data Storage: Airtable
@@ -78,11 +78,11 @@ Text Processing: Regex
 APIs: HTTP Requests
 Version Control: GitHub
 
-🚀 Results
+## 🚀 Results
 Successfully automated email triage workflow
 Reduced need for manual email sorting
 Enabled real-time classification and routing
 Improved accuracy with combined AI + rule-based logic
 
-📌 Conclusion
+## 📌 Conclusion
 This component demonstrates how AI can be integrated into workflow automation systems to streamline repetitive tasks such as email triage. By combining machine learning with rule-based logic, the system achieves both flexibility and reliability in real-world scenarios.
