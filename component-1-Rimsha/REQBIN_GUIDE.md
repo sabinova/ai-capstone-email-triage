@@ -38,6 +38,7 @@ Go to Airtable and verify:
 Try different types of emails:
 
 Question → “Can you help me?”
+
 Complaint → “I am unhappy with the service.”
 Request → “Please reset my password.”
 Informational → “Office hours updated.”
