@@ -8,11 +8,8 @@ This component is responsible for receiving incoming emails, preprocessing and c
 The goal of this component is to automate the initial triage process and improve response efficiency by reducing manual sorting.
 
 ## Tools & Technologies  
-- Python  
-- Pandas (data preprocessing)  
-- Scikit-learn / Transformers (classification model)  
-- Regex (text cleaning)  
-- GitHub (version control & collaboration)  
+- n8n
+- Hugging Face API
 
 ## Status  
 - [x] Design complete  
