@@ -14,9 +14,9 @@ The system eliminates manual sorting and improves efficiency by enabling real-ti
 - Store structured outputs for tracking and analysis
 
 ## 🔗 Project Links
-n8n Workflow: https://jjmopalinski.app.n8n.cloud/workflow/RL0KmfL4ZiD3Iy0B
-Airtable Base: https://airtable.com/invite/l?inviteId=invl9clOcdNnLh2nf&inviteToken=341fb31d76f7a8e63c7bb35395e422ae8f4ebfff49a9030685d6f9ef4b9da6ed&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts
-ReqBin Testing: https://reqbin.com/4rek5hib
+- n8n Workflow: https://jjmopalinski.app.n8n.cloud/workflow/RL0KmfL4ZiD3Iy0B
+- Airtable Base: https://airtable.com/invite/l?inviteId=invl9clOcdNnLh2nf&inviteToken=341fb31d76f7a8e63c7bb35395e422ae8f4ebfff49a9030685d6f9ef4b9da6ed&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts
+- ReqBin Testing: https://reqbin.com/4rek5hib
 
 ## 🧠 System Workflow
 Webhook → Text Cleaning → Record Creation → AI Classification → Record Update
