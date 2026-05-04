@@ -71,18 +71,18 @@ Status
 Route Queue
 
 ## 🛠️ Tools & Technologies
-Automation Platform: n8n
-AI Model: Hugging Face Transformers (facebook/bart-large-mnli)
-Data Storage: Airtable
-Text Processing: Regex
-APIs: HTTP Requests
-Version Control: GitHub
+- Automation Platform: n8n
+- AI Model: Hugging Face Transformers (facebook/bart-large-mnli)
+- Data Storage: Airtable
+- Text Processing: Regex
+- APIs: HTTP Requests
+- Version Control: GitHub
 
 ## 🚀 Results
-Successfully automated email triage workflow
-Reduced need for manual email sorting
-Enabled real-time classification and routing
-Improved accuracy with combined AI + rule-based logic
+- Successfully automated email triage workflow
+- Reduced need for manual email sorting
+- Enabled real-time classification and routing
+- Improved accuracy with combined AI + rule-based logic
 
 ## 📌 Conclusion
 This component demonstrates how AI can be integrated into workflow automation systems to streamline repetitive tasks such as email triage. By combining machine learning with rule-based logic, the system achieves both flexibility and reliability in real-world scenarios.
