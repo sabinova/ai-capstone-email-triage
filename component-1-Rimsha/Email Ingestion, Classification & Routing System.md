@@ -1,0 +1,88 @@
+# 📧 Email Ingestion, Classification & Routing System
+# 👤 Owner: Rimsha Tahir
+
+📌 Overview
+This component is responsible for automating the email triage process by receiving incoming emails, cleaning and preprocessing the text, classifying them into predefined categories using an AI model, and routing them to the appropriate department.
+The system eliminates manual sorting and improves efficiency by enabling real-time classification and routing of emails.
+
+🎯 Objectives
+- Automate the intake of incoming emails
+- Clean and preprocess raw email text
+- Classify emails into meaningful categories
+- Assign urgency levels based on content
+- Route emails to the correct department
+- Store structured outputs for tracking and analysis
+
+🔗 Project Links
+n8n Workflow: https://jjmopalinski.app.n8n.cloud/workflow/RL0KmfL4ZiD3Iy0B
+Airtable Base: https://airtable.com/invite/l?inviteId=invl9clOcdNnLh2nf&inviteToken=341fb31d76f7a8e63c7bb35395e422ae8f4ebfff49a9030685d6f9ef4b9da6ed&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts
+ReqBin Testing: https://reqbin.com/4rek5hib
+
+🧠 System Workflow
+Webhook → Text Cleaning → Record Creation → AI Classification → Record Update
+
+🔄 Step-by-Step
+1. Email Ingestion
+Emails are received via a webhook trigger
+Data includes sender, subject, body, and timestamp
+
+2. Text Preprocessing
+Regex-based cleaning removes noise such as:
+URLs
+Special characters
+Irrelevant formatting
+Cleaned text is passed to the classification model
+
+3. Email Classification
+Uses a Hugging Face zero-shot classification model
+Model: facebook/bart-large-mnli
+
+Categories:
+Question
+Complaint
+Request
+Informational
+Spam
+
+4. Confidence Scoring
+The model returns probability scores for each category
+The highest-scoring label is selected
+
+5. Urgency Detection
+Rule-based logic assigns urgency:
+High → complaints or high confidence
+Medium → moderate confidence
+Low → spam or low confidence
+
+6. Routing Logic
+Emails are routed based on classification:
+Question → General Questions
+Complaint → Complaints
+Request → Requests
+Informational → Info
+Spam → Spam Review
+
+7. Data Storage
+Results are stored in Airtable with:
+Category
+Urgency
+Confidence Score
+Status
+Route Queue
+
+🛠️ Tools & Technologies
+Automation Platform: n8n
+AI Model: Hugging Face Transformers (facebook/bart-large-mnli)
+Data Storage: Airtable
+Text Processing: Regex
+APIs: HTTP Requests
+Version Control: GitHub
+
+🚀 Results
+Successfully automated email triage workflow
+Reduced need for manual email sorting
+Enabled real-time classification and routing
+Improved accuracy with combined AI + rule-based logic
+
+📌 Conclusion
+This component demonstrates how AI can be integrated into workflow automation systems to streamline repetitive tasks such as email triage. By combining machine learning with rule-based logic, the system achieves both flexibility and reliability in real-world scenarios.
