@@ -202,12 +202,3 @@ Key behaviors confirmed:
 3. No invention of facts, prices, dates, or specific commitments.
 4. Consistent sign-off format suitable for direct paste into Airtable.
 5. Graceful handling of the unlisted spam category via NO_DRAFT_NEEDED.
-
-## Next Steps
-
-- Build Flowise chain that wraps this prompt and exposes a webhook endpoint.
-- Wire Groq API credentials into Flowise via environment variables.
-- Add input parsing so Airtable field names (Category, Urgency, Subject,
-  Body) map cleanly into the user-message template.
-- Add conditional logic that detects the NO_DRAFT_NEEDED sentinel and
-  skips the Airtable write for those cases.
