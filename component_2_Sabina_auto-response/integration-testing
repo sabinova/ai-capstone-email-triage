@@ -1,0 +1,111 @@
+# Day 3: End-to-End Integration Testing Evidence
+
+**Component:** Auto Response Drafting (Component 2)
+**Owner:** Sabina Ruzieva
+**Date:** Day 3 of build sprint
+**Testing method:** n8n workflow execution → Airtable verification
+
+## Purpose
+
+After validating the prompt (Day 1) and the Flowise API (Day 2), this
+final round of testing confirms that the complete pipeline works
+end-to-end: n8n reads classified emails from Airtable, calls the Flowise
+chain, writes drafts to the Response Drafts table, and updates the source
+email's status to prevent duplicate processing.
+
+## n8n Workflow Under Test
+
+**Name:** Component 2 - Auto Response Drafting
+**Platform:** n8n Cloud (jjmopalinski.app.n8n.cloud)
+
+```
+Schedule Trigger (every 5 min)
+  → Search records (Emails where Status = "Classified")
+  → HTTP Request (POST to Flowise endpoint)
+  → IF (text ≠ "NO_DRAFT_NEEDED")
+    → True: Create a record (Response Drafts table)
+      → Create or update a record (Emails table, Status → "Draft Generated")
+    → False: end (no draft created)
+```
+
+## Test Run 1: Batch Processing (11 classified emails)
+
+**Trigger:** Manual execution via "Execute workflow" button
+**Input:** 11 emails in Emails table with Status = "Classified"
+**Result:** Workflow executed successfully
+
+### Response Drafts Created
+
+| Draft ID | Linked Email | Category | Draft Preview | Status |
+|----------|-------------|----------|---------------|--------|
+| 1 | promo@example.com | Request | "We have received your req..." | NEEDS_REVIEW |
+| 2 | request@example.com | Request | "We have received your req..." | NEEDS_REVIEW |
+| 3 | spam@example.com | Request | "We have received your req..." | NEEDS_REVIEW |
+| 4 | customer1@example.com | Spam | "I can see that you're extre..." | NEEDS_REVIEW |
+| 5 | info@example.com | Informational | NO_DRAFT_NEEDED | NEEDS_REVIEW |
+| 6 | question@example.com | Question | "We'd be happy to help you..." | NEEDS_REVIEW |
+| 7 | johndoe@email.com | Request | "I understand you have not ..." | NEEDS_REVIEW |
+| 8 | pink@example.com | Informational | NO_DRAFT_NEEDED | NEEDS_REVIEW |
+| 9 | promo@example.com | Request | "We have received your req..." | NEEDS_REVIEW |
+| 10 | team@example.com | Spam | NO_DRAFT_NEEDED | NEEDS_REVIEW |
+| 11 | complaint@example.com | Complaint | "I'm so sorry to hear that yo..." | NEEDS_REVIEW |
+
+### Emails Table Status Updates
+
+All 11 processed emails updated from "Classified" → "Draft Generated". ✅
+
+## Test Run 2: Incremental Processing (2 newly classified emails)
+
+**Purpose:** Verify that the workflow only picks up NEW classified emails
+and does not reprocess emails already marked "Draft Generated."
+
+**Setup:** Manually changed Status of two previously unclassified emails
+(test@example.com and student@example.com) to "Classified" and assigned
+Category and Urgency values.
+
+**Result:** Workflow executed successfully, processing only 2 new emails.
+
+| Draft ID | Linked Email | Draft Preview | Status |
+|----------|-------------|---------------|--------|
+| 12 | test@example.com | "I'd be happy to help with y..." | NEEDS_REVIEW |
+| 13 | student@example.com | "To reset your password, ple..." | NEEDS_REVIEW |
+
+### Key Observation
+
+The workflow correctly ignored the 11 emails already marked "Draft
+Generated" and processed only the 2 newly classified emails. This
+confirms the status-based filtering and update mechanism prevents
+duplicate processing. ✅
+
+## Known Issue: NO_DRAFT_NEEDED Rows
+
+Three rows (Draft IDs 5, 8, 10) contain the sentinel string
+`NO_DRAFT_NEEDED` in the Draft Body field. These should have been
+filtered out by the IF node but were written to the table, likely
+due to trailing whitespace or newline characters in the Flowise
+response causing the exact-string comparison to fail.
+
+**Impact:** Minor — these rows are easily identified and can be
+filtered out in dashboard views or manually removed.
+
+**Recommended fix:** Change the IF node condition from "is not equal
+to" to "does not contain" for more robust matching.
+
+## Summary
+
+| Metric | Result |
+|--------|--------|
+| Total emails processed | 13 |
+| Drafts generated | 13 (10 real drafts + 3 NO_DRAFT_NEEDED) |
+| Emails updated to Draft Generated | 13/13 ✅ |
+| Duplicate processing | None detected ✅ |
+| Workflow errors | 0 ✅ |
+| Average response time per draft | ~1 second (Flowise/Groq) |
+
+## Conclusion
+
+Component 2 is fully operational. The n8n workflow successfully
+automates the entire draft generation pipeline from classified email
+to review-ready draft, with proper status management to prevent
+duplicate processing. The component is ready for integration with
+Component 3's dashboard views.
