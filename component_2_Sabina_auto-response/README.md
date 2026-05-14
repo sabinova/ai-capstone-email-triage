@@ -84,8 +84,8 @@ the system message. Key design decisions:
   paste into a customer email.
 
 The full system prompt and all test results are documented in:
-- `day1-prompt-testing.md` — Groq playground validation (5 test cases)
-- `day2-flowise-testing.md` — Flowise API validation via ReqBin (5 test cases)
+- `prompt-testing.md` — Groq playground validation (5 test cases)
+- `flowise-testing.md` — Flowise API validation via ReqBin (5 test cases)
 
 ## Airtable Schema: Response Drafts Table
 
