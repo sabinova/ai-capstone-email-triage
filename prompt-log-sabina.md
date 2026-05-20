@@ -89,3 +89,47 @@
 **What I changed:** Used the analysis to write a comprehensive checkpoint2-results.md with honest component-by-component assessment, a specific gap list with owners, and a prioritized fix plan. Also wrote the checkpoint2-audit.md following the full 10-question format instead of the brief summary that existed before. Updated copilot-instructions.md to cover the full project, not just Component 1.
 
 **What I learned:** Looking at data and analyzing data are different skills. I saw 13 successful drafts and thought "it works." Claude saw 3 filter failures, a classification anomaly, missing error states, and duplicates. The lesson is to check not just "did it run" but "did every record produce the right outcome." For Checkpoint 3, I'll build specific checks into my testing: verify NO_DRAFT_NEEDED records are actually filtered, verify low-confidence records are handled appropriately, and intentionally test with bad inputs.
+
+---
+
+## Entry 6 — 2026-05-20 — Add error handling to the auto-response drafting workflow
+
+**Context:** Week 10 lab, Part 1. My n8n workflow had no error handling — if the Flowise API call failed, the entire workflow stopped and the record stayed stuck at `Classified` forever with no indication of what went wrong. The Checkpoint 2 audit identified this as a critical gap.
+
+**Prompt:**
+> I need to add error handling to my n8n workflow so that when the Flowise API fails, the record gets marked as Error with a reason in Airtable instead of silently stopping. Walk me through the implementation step by step.
+
+**Result:** Claude guided me through a four-step process: (1) add an `error_reason` long text field and an `Error` status option to the Airtable Emails table, (2) enable "Continue Using Error Output" on the HTTP Request node so the workflow doesn't crash on API failure, (3) add a new Airtable Update Record node connected to the error output that sets `Status = Error` and `error_reason` to the error message, (4) test by temporarily breaking the Flowise URL.
+
+**Evaluation:** The implementation worked exactly as described. I broke the URL, ran the workflow, and both test records flowed down the error path — showing `Status = Error` and `error_reason = "Flowise API error: 400 - ..."` in Airtable. However, after fixing the URL back, the workflow appeared to stop after Search records. Claude explained this was actually correct — there were no `Classified` records left to process because the test had moved them all to `Error`. Setting them back to `Classified` resolved it.
+
+During testing, I also discovered a secondary bug: one record (Informational category, row 6) had been stuck at `Classified` since before this lab. Claude identified the root cause — the IF node's false path (for NO_DRAFT_NEEDED responses) had no node to advance the status, so the record kept getting picked up and processed in an infinite loop without ever advancing. The fix was adding an Update Record node on the IF false output to set status to `Draft Generated` even when no draft is created.
+
+**What I changed:** Added the error_reason field, enabled Continue Using Error Output, wired up the error branch Update node, and added an Update node on the IF false path for NO_DRAFT_NEEDED records. My workflow went from 6 nodes to 8 nodes with three distinct output paths: success (draft created), no-draft-needed (status advanced without draft), and error (status set to Error with reason).
+
+**What I learned:** Two lessons. First, "Continue Using Error Output" is the key n8n setting for graceful error handling — without it, one API failure kills the entire workflow for all records, not just the failed one. Second, every branch in a workflow needs to advance the record's status, even branches where the main action is skipped. An unhandled branch creates silent infinite loops that are hard to detect because the record looks like it's just waiting to be processed.
+
+---
+
+## Entry 7 — 2026-05-20 — Implement confidence-based routing
+
+**Context:** Week 10 lab, Part 2. My workflow processed all classified emails regardless of the classifier's confidence score. Records with 0.0–0.4 confidence were getting auto-drafted even though the classification was unreliable. The Checkpoint 2 audit flagged this as a quality risk.
+
+**Prompt:**
+> I need to add a confidence threshold to my n8n workflow so records above 0.5 get auto-drafted and records at or below 0.5 go to a Needs Review queue. Guide me through adding this between the Search records and HTTP Request nodes.
+
+**Result:** Claude walked me through adding a new IF node (IF1) between Search records and HTTP Request with the condition `$json.fields.Confidence` > 0.5 (Number: greater than). True path connects to the existing HTTP Request → drafting pipeline. False path connects to a new Update Record node that sets `Status = Needs Review`.
+
+**Evaluation:** The implementation required three debugging rounds before it worked correctly:
+
+1. **First attempt** — both records went to the false path. Cause: Airtable sends confidence as a string, not a number. Fix: enabled "Convert types where required" toggle on the IF1 node.
+
+2. **Second attempt** — both records still went to false path AND both got drafted. Cause: Search records was connected to both IF1 AND HTTP Request simultaneously (two output wires), so records bypassed the confidence check entirely. Fix: deleted the direct wire from Search records to HTTP Request so all records must pass through IF1 first.
+
+3. **Third attempt** — both records still went to false path. Cause: the Airtable field name is `Confidence Score` (with a space) but the expression used `$json.fields.Confidence`. Fix: changed to `$json.fields["Confidence Score"]` using bracket notation for the space in the field name. Discovered the actual field name by examining the JSON output from the Search records node.
+
+After all three fixes, the routing worked correctly: the 0.7 confidence record went to Draft Generated, the 0.4 confidence record went to Needs Review.
+
+**What I changed:** Added IF1 node with confidence threshold, added Update record2 node for the Needs Review path, fixed three separate issues (type conversion, duplicate wiring, field name). The workflow now has 9 nodes with four distinct outcomes: high-confidence draft, low-confidence review, no-draft-needed skip, and API error.
+
+**What I learned:** This entry captures the most debugging I've done in a single session. Three different root causes for the same symptom (everything going to the false path). The biggest lesson: when an n8n IF node isn't routing correctly, check three things in order: (1) Is the expression resolving to the right value? Check the JSON output. (2) Is the data type correct? Enable "Convert types where required." (3) Are the wires connected correctly? A node can have multiple output connections that bypass your logic. Also, field names with spaces require bracket notation `$json.fields["Field Name"]` — this is the same class of lesson as the node naming issue from Entry 4, but for Airtable fields instead of n8n nodes.
