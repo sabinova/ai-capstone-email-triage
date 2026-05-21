@@ -2,6 +2,8 @@
 
 An AI-powered email assistant that automatically classifies incoming emails by category and urgency, drafts context-aware responses using an LLM chain, and routes messages to the right queue for human review — all orchestrated through no-code automation tools.
 
+🎥 **[Watch the Demo](https://canva.link/v68ae4d80oypoc1)**
+
 ## Team
 
 | Name | Component | GitHub |
@@ -223,6 +225,7 @@ Email received via webhook
 
 ## Documentation
 
+- [Demo Video](https://canva.link/v68ae4d80oypoc1) — Walkthrough of the full email triage and auto-response pipeline
 - [Project Proposal](docs/proposal.md) — Full project plan with component breakdown, success criteria, and timeline
 - [Architecture Diagram](docs/capstone-architecture.png) — Visual system architecture
 - [Checkpoint 2 Results](docs/checkpoint2-results.md) — End-to-end pipeline test results
