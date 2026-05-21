@@ -187,7 +187,6 @@ Generates intelligent draft responses for classified emails using a Flowise LLM 
 - Model: `llama-3.3-70b-versatile` at temperature 0.7
 - n8n workflow: Schedule Trigger (5 min) → Airtable Search → HTTP Request → IF filter → Airtable Create → Airtable Update
 - Override config enabled for dynamic `promptValues` injection
-- Endpoint: `https://cloud.flowiseai.com/api/v1/prediction/5707d01b-7614-4764-a388-fa5b0fe3f61d`
 
 → [Component 2 Documentation](component_2_Sabina_auto-response/)
 
